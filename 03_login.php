@@ -1,0 +1,25 @@
+<?php
+	include("config.php");
+	session_strat();
+	if($_SERVER["REQUEST_METHOD"] == "POST")
+	{$myusername= mysqli_real_escape_string($db,$_POST['username']);
+	$mypassword = mysqli_real_escape_string($db,$_POST['password']);
+
+	$sql="select id from admin where username='$myusername' and password='$mypassword'";
+	$result= mysql_query($db,$sql);
+	$row=mysqli_fetch_array($result,MYSQLI_ASSOC);
+	$active= $row['active'];
+
+	$count= mysql_num_rows($result);
+
+	if($count ==1){
+	session_register("myusername");
+	$_SESSION['login_user']=$myusername;
+	
+	header("location: welcome.php");
+	}
+	else{
+	$error="your Login Name or Password is invalid";
+	}
+	}
+?>
